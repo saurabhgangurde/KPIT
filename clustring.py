@@ -2,8 +2,9 @@ import tensorflow as tf
 from random import*
 import random
 from numpy import array
-import Tkinter 
- 
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.spatial import ConvexHull
  
 def TFKMeansCluster(vectors, noofclusters):
     """
@@ -139,30 +140,45 @@ def TFKMeansCluster(vectors, noofclusters):
         assignments = sess.run(assignments)
         return centroids, assignments
 
+clusters=5
 
-points=[[50.0,50.0],[10.0,10.0],[34.0,34.0],[89.0,89.0],[188.0,94.0],[647.0,87.0],[122.0,660.0],[1234.0,789.0]]
+points=[]
 for i in range(100):
 	a=random.uniform(0.0,1024.0)
 	b=random.uniform(0.0,1024.0)
 	
 	point=[a,b]
 	points.append(point)
-print points
-a=raw_input()
+# print points
+# a=raw_input()
 
 points_np=array(points)
-centroids,assignments=TFKMeansCluster(points_np, 10)
+centroids,assignments=TFKMeansCluster(points_np, clusters)
 
-print "centroids:",centroids
-print "assignments:",assignments
-master = Tkinter.Tk()
+# print "centroids:",centroids
+# print "assignments:",assignments
 
-w = Tkinter.Canvas(master, width=1024, height=1024)
-w.pack()
-colors=['forest green', 'olive drab', 'dark khaki', 'khaki', 'pale goldenrod', 'light goldenrod yellow',
-    'light yellow', 'yellow', 'gold', 'light goldenrod', 'goldenrod', 'dark goldenrod', 'rosy brown',
-    'indian red', 'saddle brown', 'sandy brown']
-for i in range(len(points)):
-        w.create_rectangle(points[i][0]-5, points[i][1]-5, points[i][0]+5, points[i][1]+5, fill=colors[assignments[i]])
 
-Tkinter.mainloop()
+x=[point[0] for point in points]
+y=[point[1] for point in points]
+
+for i in range(clusters):
+    temp_list=[points_np[j] for j in range(len(assignments)) if assignments[j]==i]
+    temp_list=array(temp_list)
+    hull=ConvexHull(temp_list)
+    plt.plot(temp_list[hull.vertices,0], temp_list[hull.vertices,1], 'r--', lw=2)
+
+
+plt.plot(points_np[:,0], points_np[:,1], 'o')
+plt.show()
+# master = Tkinter.Tk()
+
+# w = Tkinter.Canvas(master, width=1024, height=1024)
+# w.pack()
+# colors=['forest green', 'olive drab', 'dark khaki', 'khaki', 'pale goldenrod', 'light goldenrod yellow',
+#     'light yellow', 'yellow', 'gold', 'light goldenrod', 'goldenrod', 'dark goldenrod', 'rosy brown',
+#     'indian red', 'saddle brown', 'sandy brown']
+# for i in range(len(points)):
+#         w.create_rectangle(points[i][0]-5, points[i][1]-5, points[i][0]+5, points[i][1]+5, fill=colors[assignments[i]])
+
+# Tkinter.mainloop()
