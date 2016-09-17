@@ -98,7 +98,7 @@ def TFKMeansCluster(vectors, noofclusters):
         #Now perform the Expectation-Maximization steps of K-Means clustering
         #iterations. To keep things simple, we will only do a set number of
         #iterations, instead of using a Stopping Criterion.
-        noofiterations = 100
+        noofiterations = 50
         for iteration_n in range(noofiterations):
  
             ##EXPECTATION STEP
@@ -134,6 +134,8 @@ def TFKMeansCluster(vectors, noofclusters):
                 #Assign value to appropriate variable
                 sess.run(cent_assigns[cluster_n], feed_dict={
                     centroid_value: new_location})
+
+                
  
         #Return centroids and assignments
         centroids = sess.run(centroids)
