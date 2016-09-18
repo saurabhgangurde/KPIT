@@ -5,7 +5,7 @@ from numpy import array
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial import ConvexHull
- 
+
 def TFKMeansCluster(vectors, noofclusters):
     """
     K-Means Clustering using TensorFlow.
@@ -140,45 +140,69 @@ def TFKMeansCluster(vectors, noofclusters):
         assignments = sess.run(assignments)
         return centroids, assignments
 
-clusters=5
+clusters=4
 
 points=[]
-for i in range(100):
-	a=random.uniform(0.0,1024.0)
-	b=random.uniform(0.0,1024.0)
+
+new_x=[]
+new_y=[]
+fig, ax = plt.subplots()
+x=[1000.0]
+y=[1000.0]
+for t in range(100):
 	
-	point=[a,b]
-	points.append(point)
-# print points
-# a=raw_input()
+        if t == 0:
+    	        points_new, = ax.plot(x, y, marker='o', linestyle='None')
+    	        ax.set_xlim(0, 1000.0) 
+       	        ax.set_ylim(0, 1000.0) 
+    	else:
+		for b1 in range(15):
+			a=random.uniform(0.0,400.0)
+			b=random.uniform(400.0,600.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b) 
+		for b1 in range(15):
+			a=random.uniform(400.0,600.0)
+			b=random.uniform(0.0,400.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b) 
+		for b1 in range(15):
+			a=random.uniform(400.0,600.0)
+			b=random.uniform(600.0,1000.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b) 
+		for b1 in range(15):
+			a=random.uniform(600.0,1000.0)
+			b=random.uniform(400.0,600.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b)   		
+		print new_x
+    
+		points_new.set_data(new_x, new_y)
+		points_np=array(points)
 
-points_np=array(points)
-centroids,assignments=TFKMeansCluster(points_np, clusters)
-
-# print "centroids:",centroids
-# print "assignments:",assignments
+		centroids,assignments=TFKMeansCluster(points_np, clusters)
 
 
-x=[point[0] for point in points]
-y=[point[1] for point in points]
 
-for i in range(clusters):
-    temp_list=[points_np[j] for j in range(len(assignments)) if assignments[j]==i]
-    temp_list=array(temp_list)
-    hull=ConvexHull(temp_list)
-    plt.plot(temp_list[hull.vertices,0], temp_list[hull.vertices,1], 'r--', lw=2)
+		x_update=[point[0] for point in points]
+		y_update=[point[1] for point in points]
+		
+		for i in range(clusters):
+		    temp_list=[points_np[j] for j in range(len(assignments)) if assignments[j]==i]
+		    temp_list=array(temp_list)
+		    hull=ConvexHull(temp_list)
+		    plt.plot(temp_list[hull.vertices,0], temp_list[hull.vertices,1], 'r--', lw=2)
 
-
-plt.plot(points_np[:,0], points_np[:,1], 'o')
-plt.show()
-# master = Tkinter.Tk()
-
-# w = Tkinter.Canvas(master, width=1024, height=1024)
-# w.pack()
-# colors=['forest green', 'olive drab', 'dark khaki', 'khaki', 'pale goldenrod', 'light goldenrod yellow',
-#     'light yellow', 'yellow', 'gold', 'light goldenrod', 'goldenrod', 'dark goldenrod', 'rosy brown',
-#     'indian red', 'saddle brown', 'sandy brown']
-# for i in range(len(points)):
-#         w.create_rectangle(points[i][0]-5, points[i][1]-5, points[i][0]+5, points[i][1]+5, fill=colors[assignments[i]])
-
-# Tkinter.mainloop()
+		
+		plt.grid(True)
+		plt.pause(10)
+		plt.close()
