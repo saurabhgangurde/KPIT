@@ -55,34 +55,73 @@ def kMeansCluster(vector_values, num_clusters, max_num_steps, stop_coeficient = 
 
 
 
-clusters=5
 
-points=[]
-for i in range(100):
-  a=random.uniform(0.0,1024.0)
-  b=random.uniform(0.0,1024.0)
-  
-  point=[a,b]
-  points.append(point)
-# print points
-# a=raw_input()
-
-points_np=array(points)
-centroids,assignments=kMeansCluster(points_np,clusters,50)
-
-# print "centroids:",centroids
-# print "assignments:",assignments
+clusters=4
 
 
-x=[point[0] for point in points]
-y=[point[1] for point in points]
-
-for i in range(clusters):
-    temp_list=[points_np[j] for j in range(len(assignments)) if assignments[j]==i]
-    temp_list=array(temp_list)
-    hull=ConvexHull(temp_list)
-    plt.plot(temp_list[hull.vertices,0], temp_list[hull.vertices,1], 'r--', lw=2)
 
 
-plt.plot(points_np[:,0], points_np[:,1], 'o')
-plt.show()
+fig, ax = plt.subplots()
+x=[1000.0]
+y=[1000.0]
+for t in range(100):
+	points=[]
+	new_x=[]
+	new_y=[]
+	
+        if t == 0:
+    	        points_new, = ax.plot(x, y, marker='o', linestyle='None')
+    	        ax.set_xlim(0, 1000.0) 
+       	        ax.set_ylim(0, 1000.0) 
+    	else:
+		for b1 in range(15):
+			a=random.uniform(0.0,400.0)
+			b=random.uniform(400.0,600.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b) 
+		for b1 in range(15):
+			a=random.uniform(400.0,600.0)
+			b=random.uniform(0.0,400.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b) 
+		for b1 in range(15):
+			a=random.uniform(400.0,600.0)
+			b=random.uniform(600.0,1000.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b) 
+		for b1 in range(15):
+			a=random.uniform(600.0,1000.0)
+			b=random.uniform(400.0,600.0)
+			point=[a,b]
+			points.append(point)
+			new_x.append(a)
+			new_y.append(b)   		
+		#print new_x
+    
+		points_new.set_data(new_x, new_y)
+		points_np=array(points)
+		print "printing randomly generated points",points_np
+
+		#centroids,assignments=TFKMeansCluster(points_np, clusters)
+		centroids,assignments=kMeansCluster(points_np, 4, 10)
+
+
+		x_update=[point[0] for point in points]
+		y_update=[point[1] for point in points]
+		
+		for i in range(clusters):
+		    temp_list=[points_np[j] for j in range(len(assignments)) if assignments[j]==i]
+		    temp_list=array(temp_list)
+		    hull=ConvexHull(temp_list)
+		    plt.plot(temp_list[hull.vertices,0], temp_list[hull.vertices,1], 'r--', lw=2)
+		    plt.scatter(points_np[:,0],points_np[:,1])
+		
+		plt.grid(True)
+		plt.pause(1)
+		plt.close()
