@@ -36,30 +36,16 @@ def kMeansCluster(vector_values, num_clusters, max_num_steps, stop_coeficient = 
     update_centroids = tf.assign(centroids, means)
     init_op = tf.initialize_all_variables()
 
-    #performance = tf.assign(centroid_distance, tf.sub(centroids, old_centroids))
-    #check_stop = tf.reduce_sum(tf.abs(performance))
-
     with tf.Session() as sess:
       sess.run(init_op)
       for step in xrange(max_num_steps):
         print "Running step " + str(step)
         sess.run(save_old_centroids)
         _, centroid_values, assignment_values = sess.run([update_centroids,centroids,assignments])
-        #sess.run(check_stop)
-        #current_stop_coeficient = check_stop.eval()
-        # print "coeficient:", current_stop_coeficient
-        # if current_stop_coeficient <= stop_coeficient:
-        #   break
-
+       
       return centroid_values, assignment_values
 
-
-
-
 clusters=4
-
-
-
 
 fig, ax = plt.subplots()
 x=[1000.0]
