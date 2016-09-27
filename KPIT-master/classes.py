@@ -24,17 +24,14 @@ class cluster:
 	def assign_avg_vel(self) :
 		self.avg_vel=sum([x.velocity for x in self.cars])
 		self.avg_vel/=float(len(self.cars))
-		
 	
 
 	def assign_weight(self,d) :
 		self.weight=len(self.cars)/(d/self.avg_vel)
-		return self.weight
-		
 	def __str__(self):
 		# for car in self.cars:
 		# 	print car,
-		string="wight:"+str(self.weight)+"number:here "+str(self.cluster_no)+ "avg_vel:"+str(self.avg_vel)
+		string="wight:"+str(self.weight)+"number: "+str(self.cluster_no)+ "avg_vel:"+str(self.avg_vel)
 		return string
 
 # b=cluster(a,[0,0],0)
@@ -42,19 +39,14 @@ class cluster:
 
 def calc_weight_of_lane(clusters):
 	total_weight=sum([x.weight for x in clusters])
-	'''	
-	sum1=0.0
-	for x in range(0,len(weights)):
-		sum1=sum1+weights[x]
-	#avg_weight=total_weight/len(cars)
-	'''
-	return total_weight#, avg_weight
+	avg_weight=total_weight/len(cars)
+	return total_weight, avg_weight
 '''
 def calc_total_weight(lanes):
 	return 
 '''
 
-def distribute_time(T0,weight_list):		#inlcude threshold here
+def distribute_time(threshold,T0,weight_list):
 	sum_weight=sum(weight_list)
 
 	return [(weight_list[m]/sum_weight)*T0 for m in range(0,4)]

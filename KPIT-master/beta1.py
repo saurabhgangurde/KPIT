@@ -52,7 +52,6 @@ def calc_cluster(rangeX,rangeY,max_iter,num_clust):
   points=[]
   cars=[]
   cluster_list=[]
-  cluster_weight_list=[]
   for b1 in range(int(random.uniform(4.0,10.0))):
 			
     a=random.uniform(rangeX[0],rangeX[1])
@@ -64,7 +63,7 @@ def calc_cluster(rangeX,rangeY,max_iter,num_clust):
   points_np=array(points)
 
   centroids,assignments=kMeansCluster(points_np, num_clust, max_iter) 
-  
+
   for i in range(num_clusters):
     for j in range(len(assignments)):
       if assignments[j]==i:
@@ -72,20 +71,13 @@ def calc_cluster(rangeX,rangeY,max_iter,num_clust):
 
   for i in range(num_clusters):
     temp_list=[points_np[j] for j in range(len(assignments)) if assignments[j]==i]
-    #cars_in_cluster=[cars[k] for k in range(len(assignments)) if cars[k].cluster==assignments[k] ]
-    cars_in_cluster=[]
-    for j in range(len(assignments)):
-      if assignments[j]==i:
-        cars_in_cluster.append(cars[j])
-    
+    cars_in_cluster=[cars[k] for k in range(len(assignments)) if cars[k].cluster==assignments[k] ]
+
     temp_cluster=cluster(cars_in_cluster,centroids[i],i)
-    
     temp_cluster.assign_avg_vel() 
     temp_cluster.assign_weight(200.0)
-    cluster_weight_list.append(temp_cluster.assign_weight(200.0))
-    
     cluster_list.append (temp_cluster)
-    #print temp_cluster
+    print temp_cluster
 
     if len(temp_list)>3:
       temp_list=array(temp_list)
@@ -93,14 +85,14 @@ def calc_cluster(rangeX,rangeY,max_iter,num_clust):
       plt.plot(temp_list[hull.vertices,0], temp_list[hull.vertices,1], 'r--', lw=2)
       plt.scatter(points_np[:,0],points_np[:,1])
 
-  return cluster_list,cluster_weight_list
+  return cluster_list
 
 num_clusters=4
 max_iter=50
 fig, ax = plt.subplots()
 x=[1000.0]
 y=[1000.0]
-
+lane_cluster_list=[]
 for t in range(100):
 		
   if t == 0:
@@ -108,51 +100,20 @@ for t in range(100):
     ax.set_xlim(0, 1000.0)
     ax.set_ylim(0, 1000.0)
   else:
-
-    total_lane_weight=[]
-    
-    lane_cluster_list=[]
-    lane_cluster_list.append(calc_cluster([0.0,400.0],[500.0,600.0],max_iter,num_clusters)[0])
-    
-    temp_lane_weight=calc_cluster([0.0,400.0],[500.0,600.0],max_iter,num_clusters)[1]
-    total_lane_weight.append(calc_weight_of_lane(lane_cluster_list,temp_lane_weight))
-
-    
-    plt.grid(True)
-    plt.pause(1)
-    
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    lane_cluster_list=[]
-    lane_cluster_list.append(calc_cluster([600.0,1000.0],[400.0,500.0],max_iter,num_clusters))
-
-    temp_lane_weight=calc_cluster([0.0,400.0],[500.0,600.0],max_iter,num_clusters)[1]
-    total_lane_weight.append(calc_weight_of_lane(lane_cluster_list,temp_lane_weight))
-    
-    plt.grid(True)
-    plt.pause(1)
-    
-
-  #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    lane_cluster_list=[]
-    lane_cluster_list.append(calc_cluster([400.0,500.0],[0.0,400.0],max_iter,num_clusters))
-    temp_lane_weight=calc_cluster([0.0,400.0],[500.0,600.0],max_iter,num_clusters)[1]
-    total_lane_weight.append(calc_weight_of_lane(lane_cluster_list,temp_lane_weight))
-    plt.grid(True)
-    plt.pause(1)
-    
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    lane_cluster_list=[]
-    lane_cluster_list.append(calc_cluster([500.0,600.0],[600.0,1000.0],max_iter,num_clusters))
-    temp_lane_weight=calc_cluster([0.0,400.0],[500.0,600.0],max_iter,num_clusters)[1]
-    total_lane_weight.append(calc_weight_of_lane(lane_cluster_list,temp_lane_weight))
+    lane_cluster_list.append(calc_cluster([0.0,400.0],[500.0,600.0],max_iter,num_clusters))
+    # print lane_cluster_list[0][0]
     plt.grid(True)
     plt.pause(1)
     raw_input()
-
-
-    time_durations=[]
-    time_durations.append(distribute_time(180,total_lane_weight))
-    print ")))))))"
-    print time_durations,"printing final"
+    lane_cluster_list.append(calc_cluster([600.0,1000.0],[400.0,500.0],max_iter,num_clusters))
+    plt.grid(True)
+    plt.pause(1)
+    raw_input()
+    lane_cluster_list.append(calc_cluster([400.0,500.0],[0.0,400.0],max_iter,num_clusters))
+    plt.grid(True)
+    plt.pause(1)
+    raw_input()
+    lane_cluster_list.append(calc_cluster([500.0,600.0],[600.0,1000.0],max_iter,num_clusters))
+    plt.grid(True)
+    plt.pause(1)
+    raw_input()
