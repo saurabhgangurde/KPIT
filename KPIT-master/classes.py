@@ -8,7 +8,7 @@ class car:
 		string="coord "+ str(self.x)+" "+str(self.y)
 		return string
 
-# a=car([0,0],56)
+# a=[car([0,0],56),car([0,0],56)]
 
 # print a
 
@@ -26,12 +26,13 @@ class cluster:
 		self.avg_vel/=float(len(self.cars))
 	
 
-	def assign_weight(self,d) :
-		self.weight=len(self.cars)/(d/self.avg_vel)
+	def assign_weight(self,d) :					
+		self.weight=len(self.cars)/(d/self.avg_vel)		#d is distance to be travelled by car to cross signal
+		return self.weight
 	def __str__(self):
 		# for car in self.cars:
 		# 	print car,
-		string="wight:"+str(self.weight)+"number: "+str(self.cluster_no)+ "avg_vel:"+str(self.avg_vel)
+		string="weight:"+str(self.weight)+"number: "+str(self.cluster_no)+ "avg_vel:"+str(self.avg_vel)
 		return string
 
 # b=cluster(a,[0,0],0)
@@ -46,10 +47,10 @@ def calc_total_weight(lanes):
 	return 
 '''
 
-def distribute_time(threshold,T0,weight_list):
+def distribute_time(T0,weight_list):
 	sum_weight=sum(weight_list)
 
-	return [(weight_list[m]/sum_weight)*T0 for m in range(0,4)]
+	return [(weight_list[m]*T0/sum_weight) for m in range(0,4)]
 
 		
 
